@@ -1,12 +1,12 @@
 # ETL Data Pipeline – CSV to PostgreSQL
 
-An **ETL pipeline** built in **Python** that extracts data from a CSV file, cleans and transforms it using **Pandas**, and loads the processed results into a **PostgreSQL** database.
+This project demonstrates a simple **ETL workflow** using **Python**. It reads employee data from a CSV file, cleans and prepares the dataset with **Pandas**, and then loads the final results into a **PostgreSQL** database for analysis.
 
 ---
 
 ## Overview
-- **Extract:** Reads raw data from `Softwork.csv` into a Pandas DataFrame.  
-- **Transform:** Removes duplicate entries, fills missing values (`education` → 'unknown', `previous_year_rating` → 0), and validates data quality.  
-- **Load:** Connects to PostgreSQL via **SQLAlchemy** and loads the cleaned dataset into the `employee_table`.
+- **Extract:** Import the `Softwork.csv` dataset into a Pandas DataFrame.  
+- **Transform:** Remove duplicate rows, handle missing values (`education` → 'unknown', `previous_year_rating` → 0), and ensure the data is consistent.  
+- **Load:** Establish a database connection with **SQLAlchemy** and write the cleaned data to the `employee_table` in PostgreSQL.
 
  
