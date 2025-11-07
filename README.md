@@ -5,8 +5,8 @@ This project demonstrates a simple **ETL workflow** using **Python**. It reads e
 ---
 
 ## Overview
-- **Extract:** Import the `Softwork.csv` dataset into a Pandas DataFrame.  
-- **Transform:** Remove duplicate rows, handle missing values (`education` → 'unknown', `previous_year_rating` → 0), and ensure the data is consistent.  
-- **Load:** Establish a database connection with **SQLAlchemy** and write the cleaned data to the `employee_table` in PostgreSQL.
+- **Extract:** Import the Softwork.csv dataset into a Pandas DataFrame.  
+- **Transform:** Remove duplicate rows, handle missing values , and ensure the data is consistent.  
+- **Load:** Establish a database connection with **SQLAlchemy** and write the cleaned data to the employee_table in PostgreSQL.
 
  
