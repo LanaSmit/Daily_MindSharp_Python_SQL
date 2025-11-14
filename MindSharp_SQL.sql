@@ -308,5 +308,183 @@ UNION ALL
   LIMIT 1
 );
 
+-- 1587. Bank Account Summary II
+SELECT u.name, SUM(t.amount) AS balance
+FROM Users AS u
+JOIN Transactions AS t
+  ON u.account = t.account
+GROUP BY u.name
+HAVING SUM(t.amount) > 10000;
+
+-- 1633. Percentage of Users Attended a Contest
+SELECT 
+    r.contest_id,
+    ROUND(COUNT(DISTINCT r.user_id) * 100.0 / (SELECT COUNT(DISTINCT user_id) FROM Users), 2) AS percentage
+FROM Register AS r
+GROUP BY r.contest_id
+ORDER BY percentage DESC, r.contest_id ASC;
+
+-- 1661. Average Time of Process per Machine
+SELECT 
+    machine_id,
+    ROUND(AVG(end_t - start_t), 3) AS processing_time
+FROM (
+    SELECT 
+        machine_id,
+        process_id,
+        MAX(CASE WHEN activity_type = 'end' THEN timestamp END) AS end_t,
+        MAX(CASE WHEN activity_type = 'start' THEN timestamp END) AS start_t
+    FROM Activity
+    GROUP BY machine_id, process_id
+) AS t
+GROUP BY machine_id;
+
+-- 1667. Fix Names in a Table
+SELECT user_id, INITCAP(name) 
+FROM Users
+ORDER BY user_id
+
+-- 1683. Invalid Tweets
+SELECT tweet_id
+FROM Tweets
+WHERE LENGTH(content) > 15;
+
+-- 1693. Daily Leads and Partners
+SELECT 
+  date_id,
+  make_name,
+  COUNT(DISTINCT lead_id) AS unique_leads,
+  COUNT(DISTINCT partner_id) AS unique_partners
+FROM DailySales
+GROUP BY date_id, make_name;
+
+-- 1729. FInd Followers Count
+SELECT user_id, COUNT(follower_id) AS followers_count
+FROM Followers
+GROUP BY user_id
+ORDER BY user_id ASC;
+
+-- 1731. The Number of Employees Which Report to Each Employee
+SELECT 
+    e1.employee_id,
+    e1.name,
+    COUNT(e2.employee_id) AS reports_count,
+    ROUND(AVG(e2.age)) AS average_age
+FROM Employees AS e1
+JOIN Employees AS e2
+    ON e1.employee_id = e2.reports_to
+GROUP BY e1.employee_id, e1.name
+ORDER BY e1.employee_id;
+
+-- 1741. Find Total Time Spent by Each Employee
+SELECT day, emp_id, SUM(out_time-in_time) AS total_time
+FROM Employees
+GROUP BY event_day, emp_id
+
+-- 1757. Recyclable and Low Fat Products
+SELECT product_id
+FROM Products
+WHERE low_fats='Y' AND recyclable='Y' 
+
+-- 1789. Primary Department for Each Employee
+SELECT employee_id, department_id
+FROM Employee
+WHERE primary_flag = 'Y'
+   OR employee_id IN (
+        SELECT employee_id 
+        FROM Employee 
+        GROUP BY employee_id 
+        HAVING COUNT(*) = 1
+   );
+
+-- 1795. Rearrange Products Table
+SELECT product_id, 'store1' AS store, store1 AS price
+FROM Products
+WHERE store1 IS NOT NULL
+
+UNION ALL
+
+SELECT product_id, 'store2' AS store, store2 AS price
+FROM Products
+WHERE store2 IS NOT NULL
+
+UNION ALL
+
+SELECT product_id, 'store3' AS store, store3 AS price
+FROM Products
+WHERE store3 IS NOT NULL;
+
+-- 1873. Calculate Special Bonus
+SELECT *
+FROM (
+    SELECT employee_id, salary AS bonus
+    FROM Employees 
+    WHERE employee_id % 2 != 0 
+      AND LEFT(name, 1) != 'M'
+
+    UNION ALL
+
+    SELECT employee_id, 0 AS bonus
+    FROM Employees 
+    WHERE employee_id % 2 = 0 
+       OR LEFT(name, 1) = 'M'
+) AS t
+ORDER BY employee_id;
+
+-- 1890. The Latest Login in 2020
+SELECT user_id, MAX(time_stamp) AS last_stamp
+FROM Logins
+WHERE time_stamp LIKE '2020%'
+GROUP BY user_id;
+
+-- 1965. Employees With Missing Information
+SELECT employee_id
+FROM Employees
+WHERE employee_id NOT IN (SELECT employee_id FROM Salaries)
+
+UNION
+
+SELECT employee_id
+FROM Salaries
+WHERE employee_id NOT IN (SELECT employee_id FROM Employees)
+ORDER BY employee_id;
+
+-- 1978. Employees Whose Manager Left the Company
+SELECT employee_id
+FROM Employees
+WHERE salary < 30000
+  AND (
+        manager_id IS NOT NULL
+        AND manager_id NOT IN (SELECT employee_id FROM Employees)
+      )
+ORDER BY employee_id;
+
+-- 2356. Number of Unique Subjects Taught by Each Teacher
+SELECT teacher_id, COUNT(DISTINCT(subject_id)) AS cnt 
+FROM Teacher
+GROUP BY teacher_id
+
+-- 3436. Find Valid Emails
+SELECT user_id, email
+FROM Users 
+WHERE email REGEXP '^[A-Za-z0-9_]+@[A-Za-z]+\\.com$'
+ORDER BY user_id ASC
+
+
+-- 3570. Find Books with No Available Copies
+SELECT 
+    l.book_id,
+    l.title,
+    l.author,
+    l.genre,
+    l.publication_year,
+    COUNT(b.record_id) AS current_borrowers
+FROM library_books AS l
+JOIN borrowing_records AS b
+    ON l.book_id = b.book_id
+WHERE b.return_date IS NULL
+GROUP BY l.book_id, l.title, l.author, l.genre, l.publication_year, l.total_copies
+HAVING COUNT(b.record_id) = l.total_copies
+ORDER BY current_borrowers DESC, l.title ASC;
 
 
