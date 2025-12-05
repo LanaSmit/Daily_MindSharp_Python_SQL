@@ -488,3 +488,128 @@ HAVING COUNT(b.record_id) = l.total_copies
 ORDER BY current_borrowers DESC, l.title ASC;
 
 
+-- Revising the Select Query I HackerRank
+SELECT NAME 
+FROM CITY
+WHERE POPULATION >120000 AND COUNTRYCODE = 'USA';
+
+SELECT *
+FROM CITY;
+
+SELECT *
+FROM CITY 
+WHERE ID = "1661";
+
+SELECT *
+FROM CITY
+WHERE COUNTRYCODE = 'JPN';
+
+SELECT NAME
+FROM CITY 
+WHERE COUNTRYCODE = 'JPN';
+
+SELECT DISTINCT CITY                                          -- Important to show a list of city names e.g. 'DISTINCT' Names
+FROM STATION 
+WHERE MOD(ID,2)=0;
+
+SELECT COUNT(CITY)-COUNT(DISTINCT(CITY))                      -- Subtraction in the select line
+FROM STATION;
+
+(
+  SELECT CITY, LENGTH(CITY)
+  FROM STATION
+  ORDER BY LENGTH(CITY), CITY
+  LIMIT 1
+)
+UNION                                                          --- Can't use MAX and MIN in Where clause
+(
+  SELECT CITY, LENGTH(CITY)
+  FROM STATION
+  ORDER BY LENGTH(CITY) DESC, CITY
+  LIMIT 1
+);
+
+SELECT DISTINCT CITY
+FROM STATION
+WHERE LEFT(CITY, 1) IN ('a','e','i','o','u');
+
+SELECT DISTINCT CITY
+FROM STATION 
+WHERE LEFT(CITY, 1) IN ('a','e','i','o','u') AND RIGHT(CITY, 1) IN ('a','e','i','o','u');
+
+SELECT DISTINCT CITY
+FORM STATION 
+WHERE LEFT(CITY, 1) NOT IN ('a','e','i','o','u');
+
+SELECT DISTINCT CITY
+FROM STATION 
+WHERE LOWER(LEFT(CITY, 1)) NOT IN ('a','e','i','o','u');         --- LOWER is added as some cities could start with a capital letter
+
+
+SELECT DISTINCT CITY
+FROM STATION
+WHERE LOWER(LEFT(CITY, 1)) NOT IN ('a','e','i','o','u')
+  AND LOWER(RIGHT(CITY, 1)) NOT IN ('a','e','i','o','u');
+
+SELECT NAME 
+FROM Students 
+WHERE Marks >75
+ORDER BY lower(RIGHT(NAME,3)), ID;
+
+SELECT name
+FROM Employee
+ORDER BY name;
+
+SELECT name
+FROM Employee
+WHERE salary > 2000 and months<10
+ORDER BY employee_id;
+
+SELECT SUM(CITY.POPULATION)
+FROM CITY
+JOIN  COUNTRY ON CITY.CountryCode = COUNTRY.Code
+WHERE COUNTRY.CONTINENT = 'Asia';
+
+SELECT COUNT(POPULATION)
+FROM CITY
+WHERE POPULATION >100000
+
+SELECT 
+    ROUND(
+        SQRT(
+            POWER(MIN(LAT_N) - MAX(LAT_N), 2) +
+            POWER(MIN(LONG_W) - MAX(LONG_W), 2)
+        ),
+        4
+    )
+FROM STATION;
+
+SELECT ROUND(AVG(POPULATION),0)
+FROM CITY;
+
+SELECT SUM(POPULATION)
+FROM CITY
+WHERE COUNTRYCODE = "JPN";
+
+SELECT (MAX(POPULATION)-MIN(POPULATION))
+FROM CITY;
+
+SELECT s.hacker_id, h.name
+FROM Submissions s
+JOIN Challenges c ON s.challenge_id = c.challenge_id
+JOIN Difficulty d ON c.difficulty_level = d.difficulty_level
+JOIN Hackers h ON s.hacker_id = h.hacker_id
+WHERE s.score = d.score
+GROUP BY s.hacker_id, h.name
+HAVING COUNT(*) > 1
+ORDER BY COUNT(*) DESC, s.hacker_id ASC;
+
+SELECT SUM(POPULATION)
+FROM CITY
+WHERE DISTRICT = 'California';
+
+SELECT CEIL(
+    AVG(SALARY) -
+    AVG(CAST(REPLACE(SALARY, '0', '') AS UNSIGNED))
+)
+FROM EMPLOYEES;
